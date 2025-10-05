@@ -14,7 +14,7 @@
                 <div class="flex space-x-8 items-center">
                     <span class="font-bold text-xl">Ticketing System</span>
                     <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
-                    <a href="#" class="text-gray-400 cursor-not-allowed" title="Coming soon">Tickets</a>
+                    <a href="{{ route('tickets.index') }}" class="text-gray-700 hover:text-gray-900">Tickets</a>
                     @if(auth()->user()->isAdmin())
                         <a href="{{ route('users.index') }}" class="text-gray-700 hover:text-gray-900">Users</a>
                     @endif
