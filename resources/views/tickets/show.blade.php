@@ -53,11 +53,11 @@
             <div class="mb-6" x-data="{ open: false }">
                 <button @click="open = !open" class="bg-blue-500 text-white px-4 py-2 rounded">Add Comment</button>
                 <div x-show="open" x-cloak class="mt-4">
-                    <form action="#" method="POST">
+                    <form action="{{ route('comments.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                        <textarea name="body" maxlength="255" required rows="3" class="w-full border rounded px-3 py-2 mb-2" placeholder="Max 255 characters (Comments feature coming soon)"></textarea>
-                        <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed" disabled>Submit (Coming Soon)</button>
+                        <textarea name="body" maxlength="255" required rows="3" class="w-full border rounded px-3 py-2 mb-2" placeholder="Max 255 characters"></textarea>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
                         <button type="button" @click="open = false" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
                     </form>
                 </div>

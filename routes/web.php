@@ -2,6 +2,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', fn() => redirect('login'));
 
@@ -17,4 +18,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::patch('tickets/{id}/restore', [TicketController::class, 'restore'])->name('tickets.restore');
     Route::patch('tickets/{ticket}/assign-self', [TicketController::class, 'assignToSelf'])->name('tickets.assign-self');
+
+    Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 });
