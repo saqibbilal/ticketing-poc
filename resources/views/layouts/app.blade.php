@@ -16,7 +16,7 @@
                     <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
                     <a href="#" class="text-gray-400 cursor-not-allowed" title="Coming soon">Tickets</a>
                     @if(auth()->user()->isAdmin())
-                        <a href="#" class="text-gray-400 cursor-not-allowed" title="Coming soon">Users</a>
+                        <a href="{{ route('users.index') }}" class="text-gray-700 hover:text-gray-900">Users</a>
                     @endif
                 </div>
                 <div class="flex items-center space-x-4">

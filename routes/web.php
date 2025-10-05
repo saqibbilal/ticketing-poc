@@ -3,6 +3,7 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', fn() => redirect('login'));
 
@@ -20,4 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('tickets/{ticket}/assign-self', [TicketController::class, 'assignToSelf'])->name('tickets.assign-self');
 
     Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
+
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('users', [UserController::class, 'store'])->name('users.store');
+    });
 });
