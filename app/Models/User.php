@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -44,5 +47,36 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+// Relationships
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function affectedTickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'affected_user_id');
+    }
+
+    public function assignedTickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to_id');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role->name === 'Admin';
+    }
+
+    public function isTechnician(): bool
+    {
+        return $this->role->name === 'Technician';
+    }
+
+    public function isRegular(): bool
+    {
+        return $this->role->name === 'Regular';
     }
 }
