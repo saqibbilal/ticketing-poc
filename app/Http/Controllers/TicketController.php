@@ -5,6 +5,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\ActivityLog;
 
 class TicketController extends Controller
 {
@@ -41,7 +42,17 @@ class TicketController extends Controller
             'assigned_to_id' => 'nullable|exists:users,id',
         ]);
 
-        Ticket::create($validated);
+        $ticket = Ticket::create($validated);
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'created',
+            'model_type' => 'Ticket',
+            'model_id' => $ticket->id,
+            'description' => auth()->user()->name . ' created ticket #' . $ticket->id,
+        ]);
+
         return redirect()->route('tickets.index')->with('success', 'Ticket created');
     }
 
@@ -83,6 +94,16 @@ class TicketController extends Controller
         $this->authorize('delete', $ticket);
 
         $ticket->delete();
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'deleted',
+            'model_type' => 'Ticket',
+            'model_id' => $ticket->id,
+            'description' => auth()->user()->name . ' deleted ticket #' . $ticket->id,
+        ]);
+
         return redirect()->route('tickets.index')->with('success', 'Ticket deleted');
     }
 
@@ -92,6 +113,16 @@ class TicketController extends Controller
         $this->authorize('restore', $ticket);
 
         $ticket->restore();
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'restored',
+            'model_type' => 'Ticket',
+            'model_id' => $ticket->id,
+            'description' => auth()->user()->name . ' restored ticket #' . $ticket->id,
+        ]);
+
         return redirect()->route('tickets.index')->with('success', 'Ticket restored');
     }
 
@@ -102,6 +133,16 @@ class TicketController extends Controller
         }
 
         $ticket->update(['assigned_to_id' => auth()->id()]);
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'assigned',
+            'model_type' => 'Ticket',
+            'model_id' => $ticket->id,
+            'description' => auth()->user()->name . ' assigned ticket #' . $ticket->id . ' to themselves',
+        ]);
+
         return back()->with('success', 'Ticket assigned to you');
     }
 }

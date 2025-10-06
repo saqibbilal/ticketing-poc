@@ -27,4 +27,9 @@ Route::middleware('auth')->group(function () {
         Route::get('users/create', [UserController::class, 'create'])->name('users.create');
         Route::post('users', [UserController::class, 'store'])->name('users.store');
     });
+
+    // Activity log (Admin only)
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('activity-logs', fn() => view('activity-logs.index'))->name('activity-logs.index');
+    });
 });
