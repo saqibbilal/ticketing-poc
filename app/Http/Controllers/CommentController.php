@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
 
 class CommentController extends Controller
 {
@@ -20,10 +21,19 @@ class CommentController extends Controller
             abort(403, 'Only Admin and Technician can add comments');
         }
 
-        Comment::create([
+        $comment = Comment::create([
             'ticket_id' => $validated['ticket_id'],
             'author_id' => auth()->id(),
             'body' => $validated['body'],
+        ]);
+
+        // Log activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'commented',
+            'model_type' => 'Comment',
+            'model_id' => $comment->id,
+            'description' => auth()->user()->name . ' commented on ticket #' . $ticket->id,
         ]);
 
         return redirect()->route('tickets.show', $ticket)->with('success', 'Comment added');

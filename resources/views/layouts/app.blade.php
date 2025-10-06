@@ -16,6 +16,7 @@
                     <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
                     <a href="{{ route('tickets.index') }}" class="text-gray-700 hover:text-gray-900">Tickets</a>
                     @if(auth()->user()->isAdmin())
+                        <a href="{{ route('activity-logs.index') }}" class="text-gray-700 hover:text-gray-900">Activity Log</a>
                         <a href="{{ route('users.index') }}" class="text-gray-700 hover:text-gray-900">Users</a>
                     @endif
                 </div>
